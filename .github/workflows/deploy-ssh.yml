@@ -1,0 +1,44 @@
+name: Deploy to remote server via SSH
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag to deploy (default: latest)'
+        required: false
+        default: 'latest'
+      env_path:
+        description: 'Remote env-file path (default: /home/$SSH_USER/app/.env)'
+        required: false
+        default: '/home/${{ secrets.SSH_USER }}/app/.env'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to remote host over SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          timeout: 600
+          envs: |
+            GHCR_PAT=${{ secrets.GHCR_PAT }}
+            IMAGE_TAG=${{ github.event.inputs.tag || 'latest' }}
+            ENV_PATH=${{ github.event.inputs.env_path || format('/home/{0}/app/.env', secrets.SSH_USER) }}
+          script: |
+            set -e
+            echo "Logging in to GHCR..."
+            echo "$GHCR_PAT" | docker login ghcr.io -u tammela-balakrishna --password-stdin
+            echo "Pulling image..."
+            docker pull ghcr.io/tammela-balakrishna/gram-vidya:${IMAGE_TAG}
+            echo "Stopping existing container (if any)..."
+            docker stop gram-vidya || true
+            docker rm gram-vidya || true
+            echo "Starting container..."
+            docker run -d --env-file ${ENV_PATH} -p 5000:5000 --name gram-vidya ghcr.io/tammela-balakrishna/gram-vidya:${IMAGE_TAG}

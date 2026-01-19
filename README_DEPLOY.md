@@ -59,11 +59,50 @@ There's also a workflow to publish to GitHub Container Registry (GHCR): `.github
 
 Key notes for GHCR:
 
-- No extra secrets are strictly required for basic publishing: the workflow uses the built-in `GITHUB_TOKEN` with `packages: write` permission. When the workflow runs it will push images to `ghcr.io/<owner>/<repo>`.
+- No extra secrets are strictly required for basic publishing: the workflow uses the built-in `GITHUB_TOKEN` with `packages: write` permission. When the workflow runs it will push images to `ghcr.io/tammela-balakrishna/gram-vidya`.
 - Ensure repository settings allow GitHub Actions to write packages: go to Settings → Actions → General → Workflow permissions and enable "Read and write permissions" for `GITHUB_TOKEN` (this is necessary to push to GHCR).
-- The workflow publishes two tags: `ghcr.io/<owner>/<repo>:<sha>` and `ghcr.io/<owner>/<repo>:latest`.
+- The workflow publishes two tags: `ghcr.io/tammela-balakrishna/gram-vidya:<sha>` and `ghcr.io/tammela-balakrishna/gram-vidya:latest`.
 
 Triggering:
 - Push to `main` or create/publish a GitHub Release — the workflow runs on those events.
 
 If you prefer Docker Hub or another registry, use the previously added `docker-publish.yml` (Docker Hub) or tell me which registry to target and I will add/modify a workflow.
+
+Deploy via SSH using GitHub Actions
+----------------------------------
+
+You can deploy the published GHCR image to a remote VM over SSH using the included workflow: `.github/workflows/deploy-ssh.yml`.
+
+Required repository secrets (add in Settings → Secrets and variables → Actions):
+- `SSH_HOST`: IP or hostname of your server
+- `SSH_USER`: SSH username
+- `SSH_PRIVATE_KEY`: private key (PEM) for `SSH_USER`
+- `GHCR_PAT`: a Personal Access Token with `read:packages` scope (used to `docker login` on the remote host)
+- `SSH_PORT` (optional): SSH port, defaults to `22` if omitted
+
+Remote host setup (one-time):
+1. Install Docker on the server (Ubuntu example):
+
+```bash
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" |
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+```
+
+2. Create an `app` folder and place your `.env` there (or update the path used by the workflow):
+
+```bash
+mkdir -p ~/app
+# create ~/app/.env with the required variables (do NOT commit it to git)
+```
+
+3. Ensure the `SSH_USER` has permission to run Docker commands (either add to `docker` group or use `sudo` in the workflow script).
+
+How it works
+- Push to `main` or run the workflow from the Actions tab to deploy the `latest` tag. The workflow logs into GHCR using `GHCR_PAT`, pulls `ghcr.io/tammela-balakrishna/gram-vidya:latest`, stops any running `gram-vidya` container and starts a fresh one using the `.env` on the remote server.
+
+If you prefer a different deployment target (Render, DigitalOcean App Platform, AWS ECS, Azure Container Instances, or Kubernetes), tell me which provider and I will add a matching workflow and instructions.

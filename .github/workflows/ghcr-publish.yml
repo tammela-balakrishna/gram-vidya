@@ -39,11 +39,11 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:cache
+            ghcr.io/tammela-balakrishna/gram-vidya:${{ github.sha }}
+            ghcr.io/tammela-balakrishna/gram-vidya:latest
+          cache-from: type=registry,ref=ghcr.io/tammela-balakrishna/gram-vidya:cache
           cache-to: type=inline
 
       - name: Output published image
         run: |
-          echo "Published: ghcr.io/${{ github.repository }}:${{ github.sha }}"
+          echo "Published: ghcr.io/tammela-balakrishna/gram-vidya:${{ github.sha }}"
