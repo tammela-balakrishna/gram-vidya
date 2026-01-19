@@ -12,7 +12,7 @@ on:
       env_path:
         description: 'Remote env-file path (default: /home/$SSH_USER/app/.env)'
         required: false
-        default: '/home/${{ secrets.SSH_USER }}/app/.env'
+        default: ''
 
 jobs:
   deploy:
@@ -29,16 +29,25 @@ jobs:
           timeout: 600
           envs: |
             GHCR_PAT=${{ secrets.GHCR_PAT }}
-            IMAGE_TAG=${{ github.event.inputs.tag || 'latest' }}
-            ENV_PATH=${{ github.event.inputs.env_path || format('/home/{0}/app/.env', secrets.SSH_USER) }}
+            IMAGE_TAG=${{ github.event.inputs.tag }}
+            ENV_PATH_INPUT=${{ github.event.inputs.env_path }}
+            SSH_USER=${{ secrets.SSH_USER }}
           script: |
             set -e
+            # default IMAGE_TAG to 'latest' if not provided
+            IMAGE_TAG=${IMAGE_TAG:-latest}
+            # determine ENV_PATH: use provided input, otherwise derive from SSH_USER
+            if [ -n "${ENV_PATH_INPUT}" ]; then
+              ENV_PATH=${ENV_PATH_INPUT}
+            else
+              ENV_PATH="/home/${SSH_USER}/app/.env"
+            fi
             echo "Logging in to GHCR..."
             echo "$GHCR_PAT" | docker login ghcr.io -u tammela-balakrishna --password-stdin
-            echo "Pulling image..."
+            echo "Pulling image ghcr.io/tammela-balakrishna/gram-vidya:${IMAGE_TAG}..."
             docker pull ghcr.io/tammela-balakrishna/gram-vidya:${IMAGE_TAG}
             echo "Stopping existing container (if any)..."
             docker stop gram-vidya || true
             docker rm gram-vidya || true
-            echo "Starting container..."
+            echo "Starting container with env file ${ENV_PATH}..."
             docker run -d --env-file ${ENV_PATH} -p 5000:5000 --name gram-vidya ghcr.io/tammela-balakrishna/gram-vidya:${IMAGE_TAG}
