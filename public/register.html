@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Gram-Vidya</title>
+<!-- Tailwind CDN -->
+<link href="./output.css" rel="stylesheet">
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+
+<div class="bg-white p-6 rounded shadow-md w-full max-w-sm">
+  <h1 class="text-2xl font-bold mb-4 text-center">Register</h1>
+  <form id="registerForm" class="flex flex-col gap-3">
+    <input type="text" name="name" placeholder="Full Name" class="border p-2 rounded" required>
+    <input type="email" name="email" placeholder="Email" class="border p-2 rounded" required>
+    <input type="password" name="password" placeholder="Password" class="border p-2 rounded" required autocomplete="new-password">
+    <select name="role" class="border p-2 rounded" required>
+      <option value="">Select Role</option>
+      <option value="student">Student</option>
+      <option value="admin">Faculty/Admin</option>
+    </select>
+    <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition">Register</button>
+    <a href="index.html" class="text-sm text-blue-700 text-center mt-2 hover:underline">Login</a>
+  </form>
+  <div id="registerMessage" class="text-red-600 mt-2 text-center"></div>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.target;
+  const res = await fetch("http://localhost:5000/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: form.name.value,
+      email: form.email.value,
+      password: form.password.value,
+      role: form.role.value
+    })
+  });
+  const data = await res.json();
+  if(data.message){
+    document.getElementById("registerMessage").textContent = data.message;
+    setTimeout(()=> window.location.href="index.html", 1500);
+  } else {
+    document.getElementById("registerMessage").textContent = data.error || "Registration failed";
+  }
+});
+</script>
+</body>
+</html>

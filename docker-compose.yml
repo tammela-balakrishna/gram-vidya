@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+
+  # Optional local MongoDB service. If you want to use Atlas, remove/comment the `mongo` service and
+  # set `MONGO_URI` in `.env` to your Atlas connection string.
+  mongo:
+    image: mongo:7
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo-data:
+    driver: local

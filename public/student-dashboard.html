@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link href="output.css" rel="stylesheet">
+  <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+  <script>
+    if (typeof io === "undefined") {
+      document.write('<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"><\/script>');
+    }
+  </script>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="p-6">
+  <a href="/student-dashboard.html">Student Dashboard</a>
+
+  <!-- View/Download PDFs -->
+  <div class="p-4 border rounded-lg shadow-md bg-white mb-6">
+    <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+      <span class="material-icons text-red-500">picture_as_pdf</span>
+      Available PDFs
+    </h2>
+    <div id="pdfList" class="space-y-3"></div>
+  </div>
+
+  <!-- Quizzes -->
+  <div id="quizContainer" class="p-6 bg-gray-50 min-h-screen"></div>
+
+  <!-- Live Audio/Video -->
+  <div class="bg-white rounded-2xl shadow-lg p-6 mb-10 border border-gray-100">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      👀 Watch Live Lecture
+    </h2>
+    <button
+      id="startViewing"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-green-700 active:scale-95 transition">
+      Join Broadcast
+    </button>
+    <video
+      id="remoteVideo"
+      autoplay
+      playsinline
+      controls
+      class="mt-4 w-full rounded-lg border border-gray-200 shadow-sm"></video>
+  </div>
+
+  <!-- Chat -->
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold mb-2">Live Chat</h2>
+    <div id="chatBox" class="border p-2 h-40 overflow-auto mb-2"></div>
+    <input id="chatInput" class="border p-2 w-full" placeholder="Type message..." />
+  </div>
+  <div class="mt-6">
+    <button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600 mb-4">
+      Logout
+    </button>
+  </div>
+
+  <!-- JS Modules -->
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/student-pdf.js"></script>
+  <script src="js/quiz-student.js" defer></script>
+  <script src="js/chat.js"></script>
+  <script src="js/webrtc-student.js"></script>
+</body>
+</html>
+
+

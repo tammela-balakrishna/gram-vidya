@@ -1,0 +1,20 @@
+// utils/cloudinaryClient.js
+import cloudinary from "cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+export function urlForPublicId(publicId, options = {}) {
+  if (!publicId) return null;
+  return cloudinary.v2.url(publicId, { secure: true, ...options });
+}
+
+export { cloudinary };
+

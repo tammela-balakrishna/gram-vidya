@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Gram-Vidya</title>
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+
+  <!-- Login Card -->
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+    <h1 class="text-3xl font-extrabold mb-6 text-center text-gray-800">Login</h1>
+
+    <form id="loginForm" class="flex flex-col gap-4">
+      <!-- Email -->
+      <input 
+        type="email" 
+        name="email" 
+        placeholder="Email" 
+        class="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" 
+        required
+        autocomplete="username"
+      >
+
+      <!-- Password -->
+      <input 
+        type="password" 
+        name="password" 
+        placeholder="Password" 
+        class="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" 
+        required
+        autocomplete="current-password"
+      >
+
+      <!-- Login Button (Blue) -->
+      <button type="submit" 
+        class="bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Login
+      </button>
+
+      <!-- Register Button (Red) -->
+      <a href="register.html" 
+        class="bg-red-600 text-white p-3 rounded-lg text-center font-semibold hover:bg-red-700 transition">
+        Register
+      </a>
+    </form>
+
+    <!-- Error / Message -->
+    <div id="loginMessage" class="text-red-600 mt-3 text-center text-sm"></div>
+  </div>
+  <script src="./js/auth.js"></script>
+</body>
+</html>
