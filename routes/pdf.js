@@ -4,7 +4,7 @@ import multer from "multer";
 import axios from "axios";
 import { cloudinary, urlForPublicId } from "../utils/cloudinaryClient.js";
 import { verifyAdmin, verifyUser } from "../middleware/auth.js";
-import Pdf from "../models/Pdf.js";
+import Pdf from "../models/PDF.js";
 
 const router = express.Router();
 
