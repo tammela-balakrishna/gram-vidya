@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("startBroadcast");
   const localVideo = document.getElementById("localVideo");
-  const socket = io("http://localhost:5000");
+  const API_BASE = window.API_BASE || "";
+  const socket = API_BASE ? io(API_BASE) : io();
   const peers = {};
 
   // ICE servers (STUN + Metered TURN)

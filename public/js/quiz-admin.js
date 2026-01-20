@@ -2,6 +2,8 @@ const quizForm = document.getElementById("quizForm");
 const questionsContainer = document.getElementById("questionsContainer");
 const addQuestionBtn = document.getElementById("addQuestionBtn");
 const quizMessage = document.getElementById("quizMessage");
+const token = window.token || localStorage.getItem("token");
+const API_BASE = window.API_BASE || "";
 
 // ---------------- Add new question block ----------------
 function addQuestion() {
@@ -121,11 +123,11 @@ quizForm.addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await fetch("/api/quiz", {
+    const res = await fetch(`${API_BASE}/api/quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify({ title, questions }),
     });

@@ -9,6 +9,5 @@ if (!window.token) {
 window.adminToken = localStorage.getItem("adminToken");
 window.studentToken = localStorage.getItem("studentToken");
 
-window.socket = io("http://localhost:5000", {
-  auth: { token: window.token }
-});
+const API_BASE = window.API_BASE || "";
+window.socket = API_BASE ? io(API_BASE, { auth: { token: window.token } }) : io({ auth: { token: window.token } });

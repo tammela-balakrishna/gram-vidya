@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const apiBase = window.API_BASE || "";
   // ----- LOGIN -----
   const loginForm = document.getElementById("loginForm");
   const loginMessage = document.getElementById("loginMessage");
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = form.password.value;
 
       try {
-        const res = await fetch("http://localhost:5000/api/auth/login", {
+        const res = await fetch(`${apiBase}/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),

@@ -15,14 +15,16 @@
   "author": "Your Name",
   "type": "module",
   "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node server.js",
-    "dev": "tailwindcss -i ./src/input.css -o ./public/output.css --watch"
+    "dev": "tailwindcss -i ./public/input.css -o ./public/output.css --watch"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "axios": "^1.13.2",
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",

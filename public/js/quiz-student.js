@@ -1,5 +1,6 @@
 const quizContainer = document.getElementById("quizContainer");
 const studentToken = localStorage.getItem("token"); // student token
+const API_BASE = window.API_BASE || "";
 
 if (!studentToken) {
   quizContainer.innerHTML =
@@ -40,8 +41,8 @@ async function loadQuizzes() {
   if (!studentToken) return;
 
   try {
-    const quizzes = await fetchWithToken("http://localhost:5000/api/quiz");
-    const submissions = await fetchWithToken("http://localhost:5000/api/student-quiz");
+    const quizzes = await fetchWithToken(`${API_BASE}/api/quiz`);
+    const submissions = await fetchWithToken(`${API_BASE}/api/student-quiz`);
 
     const submissionMap = {};
     submissions.forEach((sub) => (submissionMap[sub.quizId._id] = sub));
@@ -147,7 +148,7 @@ async function loadQuizzes() {
 
           try {
             const data = await fetchWithToken(
-              `http://localhost:5000/api/quiz/${quiz._id}/submit`,
+              `${API_BASE}/api/quiz/${quiz._id}/submit`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

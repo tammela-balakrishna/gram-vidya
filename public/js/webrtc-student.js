@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("startViewing");
   const remoteVideo = document.getElementById("remoteVideo");
-  const socket = io("http://localhost:5000");
+  const API_BASE = window.API_BASE || "";
+  const socket = API_BASE ? io(API_BASE) : io();
   let pc;
 
   const iceServers = [

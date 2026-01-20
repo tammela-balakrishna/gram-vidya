@@ -4,7 +4,7 @@ const addQuestionBtn = document.getElementById("addQuestionBtn");
 const quizMessage = document.getElementById("quizMessage");
 const token = window.token || localStorage.getItem("token");
 // API base - use backend directly to avoid dev-server origin issues
-const API_BASE = window.API_BASE || "http://localhost:5000";
+const API_BASE = window.API_BASE || "";
 
 // ---------------- Add new question block ----------------
 function addQuestion() {

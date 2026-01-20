@@ -1,5 +1,5 @@
 const pdfList = document.getElementById("pdfList");
-const apiBase = "http://127.0.0.1:5000";
+const apiBase = window.API_BASE || "";
 const token = window.token || localStorage.getItem("token");
 
 async function loadPDFs() {

@@ -26,11 +26,13 @@
   <div id="registerMessage" class="text-red-600 mt-2 text-center"></div>
 </div>
 
+<script src="./js/config.js"></script>
 <script>
 document.getElementById("registerForm").addEventListener("submit", async e => {
   e.preventDefault();
   const form = e.target;
-  const res = await fetch("http://localhost:5000/api/auth/register", {
+  const apiBase = window.API_BASE || "";
+  const res = await fetch(`${apiBase}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

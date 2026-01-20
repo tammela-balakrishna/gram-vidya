@@ -37,13 +37,17 @@ import studentQuizRoutes from "./routes/studentQuiz.js";
 const app = express();
 const server = http.createServer(app);
 
+const corsOrigin = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((v) => v.trim()).filter(Boolean)
+  : "*";
+
 // ✅ Socket.IO setup (chat + WebRTC signaling)
 const io = new Server(server, {
-  cors: { origin: "*", methods: ["GET", "POST"] },
+  cors: { origin: corsOrigin, methods: ["GET", "POST"] },
 });
 
 // ✅ Middleware
-app.use(cors());
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
 
 // ✅ Serve static frontend (HTML/CSS/JS in /public)
